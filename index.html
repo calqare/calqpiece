@@ -891,6 +891,164 @@
         }
 
         /* ==================================================================
+           TERMS / RULES GATE
+           ================================================================== */
+        #terms-gate {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(3, 15, 26, .92);
+            align-items: center;
+            justify-content: center;
+            padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+        }
+        #terms-gate.visible {
+            display: flex;
+        }
+        #terms-gate .box {
+            width: min(720px, 96vw);
+            max-height: 92vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 22px 22px 18px;
+        }
+        #terms-gate-title {
+            font-family: 'Pirata One', cursive;
+            text-align: center;
+            font-size: clamp(20px, 4.5vw, 28px);
+            color: var(--blood);
+            margin: 0 0 4px;
+            flex-shrink: 0;
+        }
+        #terms-gate-sub {
+            text-align: center;
+            font-family: 'Special Elite', monospace;
+            font-size: clamp(10px, 2vw, 12px);
+            letter-spacing: 2px;
+            color: #5a3a22;
+            margin-bottom: 12px;
+            opacity: .85;
+            flex-shrink: 0;
+        }
+        #terms-scroll {
+            flex: 1 1 auto;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background: rgba(255, 255, 255, .28);
+            border: 1px solid #8a5a34;
+            border-radius: 6px;
+            padding: 14px 16px;
+            font-family: 'IM Fell English', serif;
+            font-size: clamp(13px, 2.4vw, 15px);
+            line-height: 1.55;
+            color: var(--ink);
+            box-shadow: inset 0 0 12px rgba(0, 0, 0, .12);
+        }
+        #terms-scroll h3 {
+            font-family: 'Pirata One', cursive;
+            font-size: clamp(15px, 2.8vw, 18px);
+            color: var(--blood);
+            margin: 16px 0 6px;
+            border-bottom: 1px dashed #8a5a34;
+            padding-bottom: 4px;
+        }
+        #terms-scroll h3:first-child {
+            margin-top: 0;
+        }
+        #terms-scroll p {
+            margin: 0 0 10px;
+        }
+        #terms-scroll ul {
+            margin: 0 0 10px;
+            padding-left: 1.2em;
+        }
+        #terms-scroll li {
+            margin-bottom: 4px;
+        }
+        #terms-scroll .emphasis {
+            font-weight: bold;
+            color: var(--blood);
+        }
+        #terms-actions {
+            flex-shrink: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 14px;
+        }
+        #terms-actions button {
+            font-family: 'Pirata One', cursive;
+            font-size: clamp(14px, 3vw, 17px);
+            letter-spacing: 1px;
+            padding: 10px 22px;
+            border-radius: 22px;
+            cursor: pointer;
+            border: 2px solid var(--gold);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, .35);
+            transition: filter .15s, transform .15s;
+        }
+        #terms-actions button:hover {
+            filter: brightness(1.12);
+        }
+        #terms-actions button:active {
+            transform: scale(0.97);
+        }
+        #terms-agree-btn {
+            background: linear-gradient(180deg, #2d7a2d, #1a4a1a);
+            color: var(--parchment);
+        }
+        #terms-decline-btn {
+            background: linear-gradient(180deg, var(--wood), var(--wood-dark));
+            color: var(--parchment);
+        }
+        #terms-blocked {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 101;
+            background: rgba(3, 15, 26, .96);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            flex-direction: column;
+        }
+        #terms-blocked.visible {
+            display: flex;
+        }
+        #terms-blocked .box {
+            width: min(480px, 94vw);
+            padding: 28px 24px;
+        }
+        #terms-blocked h2 {
+            font-family: 'Pirata One', cursive;
+            color: var(--blood);
+            font-size: clamp(22px, 5vw, 30px);
+            margin: 0 0 10px;
+        }
+        #terms-blocked p {
+            font-family: 'IM Fell English', serif;
+            font-size: clamp(14px, 3vw, 16px);
+            margin: 0 0 18px;
+            line-height: 1.5;
+        }
+        #terms-reopen-btn {
+            font-family: 'Pirata One', cursive;
+            font-size: 16px;
+            letter-spacing: 1px;
+            padding: 10px 24px;
+            border-radius: 22px;
+            border: 2px solid var(--gold);
+            background: linear-gradient(180deg, var(--wood), var(--wood-dark));
+            color: var(--parchment);
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, .35);
+        }
+
+        /* ==================================================================
            RESPONSIVE BREAKPOINTS
            ================================================================== */
 
@@ -1176,6 +1334,82 @@
 
     <div id="hint">DRAG TO LOOK · <strong>CLICK AN ISLAND</strong> TO REVEAL FORMULAS · <strong>CLICK ENEMY SHIP</strong> FOR QUIZ</div>
 
+    <!-- Terms / Rules Gate — must accept before using CALQ PIECE -->
+    <div id="terms-gate" role="dialog" aria-modal="true" aria-labelledby="terms-gate-title">
+        <div class="box">
+            <h2 id="terms-gate-title">📜 CALQ PIECE Rules &amp; Regulations</h2>
+            <div id="terms-gate-sub">READ AND AGREE TO CONTINUE YOUR VOYAGE</div>
+            <div id="terms-scroll">
+                <p><strong>CALQ PIECE – Your CE Formula Digital Companion</strong></p>
+                <p>By purchasing, accessing, or using CALQ PIECE, you agree to comply with the following Rules and Regulations. These rules are established to protect CALQ PIECE, its digital content, formulas, materials, and the rights of all legitimate users.</p>
+
+                <h3>1. PERSONAL USE ONLY</h3>
+                <p>CALQ PIECE is provided strictly for the personal use of the registered purchaser. The digital companion, formulas, references, explanations, and other contents are intended solely for the user's personal Civil Engineering review, study, and reference. Sharing access or materials with other individuals is strictly prohibited.</p>
+
+                <h3>2. NON-TRANSFERABLE ACCESS</h3>
+                <p>Your CALQ PIECE access is personal and non-transferable. You are not allowed to:</p>
+                <ul>
+                    <li>Give your access to another person;</li>
+                    <li>Lend or transfer your access;</li>
+                    <li>Sell or donate your remaining access;</li>
+                    <li>Allow another person to use your account or licensed copy; or</li>
+                    <li>Change account or registration information for the purpose of transferring access.</li>
+                </ul>
+                <p>Each user must obtain their own legitimate CALQ PIECE access.</p>
+
+                <h3>3. NO ACCOUNT OR FILE SHARING</h3>
+                <p>Sharing your account, password, access link, downloadable file, digital copy, or other credentials or materials with another person is strictly prohibited. If CALQARE determines that CALQ PIECE is being accessed, copied, or distributed by unauthorized individuals, access may be suspended or permanently terminated without refund.</p>
+
+                <h3>4. NO RESELLING OR PROFITING</h3>
+                <p>CALQ PIECE is not allowed to be used for personal or commercial profit without written authorization from CALQARE. Users are strictly prohibited from selling, renting, sublicensing, reproducing, or otherwise providing CALQ PIECE or any substantial portion of its materials to another person in exchange for money or any other form of compensation. This includes incorporating CALQ PIECE materials into a paid review program, tutorial service, review center, lecture, course, or other commercial activity without prior written permission from CALQARE.</p>
+
+                <h3>5. NO COPYING, REPRODUCTION, OR DISTRIBUTION</h3>
+                <p>The contents of CALQ PIECE are intended exclusively for the registered user. Users are prohibited from copying, reproducing, photographing, screenshotting, screen-recording, extracting, uploading, publishing, distributing, or sharing CALQ PIECE content with others. This includes sharing materials through Facebook or Messenger, Telegram, Discord, Google Drive, email, group chats, social media, file-sharing websites, or any other platform or method.</p>
+
+                <h3>6. PROTECTION OF FORMULAS AND DIGITAL MATERIALS</h3>
+                <p>CALQ PIECE contains organized Civil Engineering formulas, references, explanations, techniques, and other educational materials developed, compiled, arranged, or presented for the CALQ PIECE platform. Users are expected to respect and protect these materials from unauthorized reproduction, distribution, extraction, modification, or commercial use.</p>
+
+                <h3>7. NO UNAUTHORIZED COMMERCIAL USE</h3>
+                <p>Users may use CALQ PIECE to improve their own Civil Engineering knowledge, review formulas, and prepare for the Civil Engineering Licensure Examination. Users may not use CALQ PIECE or its proprietary presentation, compilation, or materials to teach, train, tutor, review, or provide paid services to other individuals without prior written permission from CALQARE.</p>
+
+                <h3>8. ACCESS ENDS UPON BECOMING A LICENSED CIVIL ENGINEER</h3>
+                <p>CALQ PIECE is intended primarily as a Civil Engineering review and formula companion for students and examinees preparing for the Civil Engineering Licensure Examination. Therefore, access to CALQ PIECE shall end once the user becomes a Licensed/Registered Civil Engineer, subject to the applicable access terms of the product. Any remaining access cannot be transferred, sold, donated, or assigned to another person after the user becomes licensed.</p>
+
+                <h3>9. NO REFUND DUE TO LICENSE TERMINATION</h3>
+                <p>Because CALQ PIECE is a digital product, payments are generally non-refundable. Becoming a Licensed Civil Engineer does not entitle the user to a refund for any remaining access period.</p>
+
+                <h3>10. VIOLATION OF RULES</h3>
+                <p>Any violation of these Rules and Regulations may result in: temporary suspension of access; permanent termination of access; removal of the user's account or license; revocation of access to CALQ PIECE; and/or other appropriate action deemed necessary by CALQARE. Users whose access is terminated due to violation of these rules shall not be entitled to a refund.</p>
+
+                <h3>11. DO NOT SHARE CALQ PIECE TO “HELP” OTHERS</h3>
+                <p>Providing your CALQ PIECE account, digital copy, formulas, screenshots, or other materials to another person, even if the intention is to help a fellow Civil Engineering student or examinee, is still considered unauthorized sharing. If someone needs CALQ PIECE, they should obtain their own legitimate access.</p>
+
+                <h3>12. RESPONSIBILITY OF THE USER</h3>
+                <p>Users are responsible for keeping their account, files, and access credentials secure and for ensuring that CALQ PIECE is not accessed, copied, or distributed by unauthorized individuals. If you suspect that someone has obtained unauthorized access to your CALQ PIECE account or materials, report it to CALQARE immediately.</p>
+
+                <h3>13. FAIR USE</h3>
+                <p>CALQ PIECE is created to help Civil Engineering students and examinees review and understand important formulas and concepts. We ask every user to respect the effort, time, knowledge, and resources invested in developing CALQ PIECE by using the product honestly and responsibly.</p>
+                <p class="emphasis">One purchase = One user. One access = One registered user. Personal use only. No sharing. No reselling. No unauthorized copying or distribution.</p>
+
+                <h3>14. AGREEMENT TO THE RULES</h3>
+                <p>By purchasing or accessing CALQ PIECE, you acknowledge that you have read, understood, and agreed to follow these Rules and Regulations. CALQARE reserves the right to update these rules when necessary to protect CALQ PIECE, its users, and its proprietary materials.</p>
+                <p>Thank you for respecting CALQ PIECE and helping us maintain a fair and secure learning environment for everyone.</p>
+            </div>
+            <div id="terms-actions">
+                <button type="button" id="terms-agree-btn">⚓ I Agree — Set Sail</button>
+                <button type="button" id="terms-decline-btn">✕ I Do Not Agree</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="terms-blocked" role="alertdialog" aria-labelledby="terms-blocked-title">
+        <div class="box">
+            <h2 id="terms-blocked-title">⛔ Access Denied</h2>
+            <p>You must accept the CALQ PIECE Rules and Regulations to use this digital companion. Without agreement, the Grand Line remains closed.</p>
+            <button type="button" id="terms-reopen-btn">📜 Review Rules Again</button>
+        </div>
+    </div>
+
     <script type="importmap">
         {
             "imports": {
@@ -1188,6 +1422,56 @@
     <script type="module">
         import * as THREE from "three";
         import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+        /* ==================================================================
+           TERMS GATE — must accept Rules & Regulations before use.
+           Progress (calq_quiz_badges, calq_bounty_cards) is never cleared here.
+           ================================================================== */
+        const TERMS_KEY = 'calq_terms_accepted_v1';
+        const termsGate = document.getElementById('terms-gate');
+        const termsBlocked = document.getElementById('terms-blocked');
+
+        function hasAcceptedTerms() {
+            try {
+                return localStorage.getItem(TERMS_KEY) === '1';
+            } catch (e) {
+                return false;
+            }
+        }
+        function setAcceptedTerms() {
+            try {
+                localStorage.setItem(TERMS_KEY, '1');
+            } catch (e) { /* ignore quota / private mode */ }
+        }
+        function showTermsGate() {
+            termsBlocked.classList.remove('visible');
+            termsGate.classList.add('visible');
+            document.body.style.overflow = 'hidden';
+        }
+        function hideTermsGate() {
+            termsGate.classList.remove('visible');
+            termsBlocked.classList.remove('visible');
+            document.body.style.overflow = '';
+        }
+        function showTermsBlocked() {
+            termsGate.classList.remove('visible');
+            termsBlocked.classList.add('visible');
+        }
+
+        if (!hasAcceptedTerms()) {
+            showTermsGate();
+        }
+
+        document.getElementById('terms-agree-btn').addEventListener('click', () => {
+            setAcceptedTerms();
+            hideTermsGate();
+        });
+        document.getElementById('terms-decline-btn').addEventListener('click', () => {
+            showTermsBlocked();
+        });
+        document.getElementById('terms-reopen-btn').addEventListener('click', () => {
+            showTermsGate();
+        });
 
         /* ==================================================================
            DATA — formulas + QUIZ BANK
