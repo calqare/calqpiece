@@ -1250,7 +1250,8 @@
             <div class="subject" data-name="Earthquake Engineering">Earthquake Engineering <span class="quiz-badge">⚔</span></div>
             <div class="subject" data-name="Foundation Engineering">Foundation Engineering <span class="quiz-badge">⚔</span></div>
         </details>
-        <button id="reset-progress-btn" style="width:100%;margin-top:16px;padding:10px 8px;border-radius:8px;border:2px solid var(--blood);background:linear-gradient(180deg,#7a1e1e,#4a1010);color:var(--parchment);font-family:'Pirata One',cursive;font-size:15px;letter-spacing:2px;cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,.4);">☠ RESET ALL PROGRESS</button>
+        <button id="rules-sidebar-btn" type="button" style="width:100%;margin-top:16px;padding:10px 8px;border-radius:8px;border:2px solid var(--gold);background:linear-gradient(180deg,var(--wood),var(--wood-dark));color:var(--parchment);font-family:'Pirata One',cursive;font-size:15px;letter-spacing:2px;cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,.4);">📜 RULES &amp; REGULATIONS</button>
+        <button id="reset-progress-btn" style="width:100%;margin-top:10px;padding:10px 8px;border-radius:8px;border:2px solid var(--blood);background:linear-gradient(180deg,#7a1e1e,#4a1010);color:var(--parchment);font-family:'Pirata One',cursive;font-size:15px;letter-spacing:2px;cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,.4);">☠ RESET ALL PROGRESS</button>
 
         <div id="sidebar-footer">
             <a href="https://www.calqare.com" target="_blank" rel="noopener noreferrer">www.calqare.com</a>
@@ -1398,6 +1399,7 @@
             <div id="terms-actions">
                 <button type="button" id="terms-agree-btn">⚓ I Agree — Set Sail</button>
                 <button type="button" id="terms-decline-btn">✕ I Do Not Agree</button>
+                <button type="button" id="terms-close-btn" style="display:none;background:linear-gradient(180deg,var(--wood),var(--wood-dark));color:var(--parchment);">✕ Close</button>
             </div>
         </div>
     </div>
@@ -1430,6 +1432,11 @@
         const TERMS_KEY = 'calq_terms_accepted_v1';
         const termsGate = document.getElementById('terms-gate');
         const termsBlocked = document.getElementById('terms-blocked');
+        const termsAgreeBtn = document.getElementById('terms-agree-btn');
+        const termsDeclineBtn = document.getElementById('terms-decline-btn');
+        const termsCloseBtn = document.getElementById('terms-close-btn');
+        const termsGateSub = document.getElementById('terms-gate-sub');
+        let termsViewOnly = false;
 
         function hasAcceptedTerms() {
             try {
@@ -1443,10 +1450,27 @@
                 localStorage.setItem(TERMS_KEY, '1');
             } catch (e) { /* ignore quota / private mode */ }
         }
-        function showTermsGate() {
+        function setTermsMode(viewOnly) {
+            termsViewOnly = !!viewOnly;
+            if (termsViewOnly) {
+                termsAgreeBtn.style.display = 'none';
+                termsDeclineBtn.style.display = 'none';
+                termsCloseBtn.style.display = '';
+                if (termsGateSub) termsGateSub.textContent = 'CALQ PIECE RULES — FOR YOUR REFERENCE';
+            } else {
+                termsAgreeBtn.style.display = '';
+                termsDeclineBtn.style.display = '';
+                termsCloseBtn.style.display = 'none';
+                if (termsGateSub) termsGateSub.textContent = 'READ AND AGREE TO CONTINUE YOUR VOYAGE';
+            }
+        }
+        function showTermsGate(viewOnly) {
+            setTermsMode(viewOnly === true && hasAcceptedTerms());
             termsBlocked.classList.remove('visible');
             termsGate.classList.add('visible');
             document.body.style.overflow = 'hidden';
+            const scrollEl = document.getElementById('terms-scroll');
+            if (scrollEl) scrollEl.scrollTop = 0;
         }
         function hideTermsGate() {
             termsGate.classList.remove('visible');
@@ -1459,18 +1483,26 @@
         }
 
         if (!hasAcceptedTerms()) {
-            showTermsGate();
+            showTermsGate(false);
         }
 
-        document.getElementById('terms-agree-btn').addEventListener('click', () => {
+        termsAgreeBtn.addEventListener('click', () => {
             setAcceptedTerms();
             hideTermsGate();
         });
-        document.getElementById('terms-decline-btn').addEventListener('click', () => {
+        termsDeclineBtn.addEventListener('click', () => {
             showTermsBlocked();
         });
+        termsCloseBtn.addEventListener('click', () => {
+            hideTermsGate();
+        });
         document.getElementById('terms-reopen-btn').addEventListener('click', () => {
-            showTermsGate();
+            showTermsGate(false);
+        });
+        document.getElementById('rules-sidebar-btn').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.remove('open');
+            showTermsGate(true);
+            if (typeof soundClick === 'function') soundClick();
         });
 
         /* ==================================================================
